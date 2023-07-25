@@ -61,7 +61,7 @@ def main():
 
     # TODO: Split data into train and test sets.
 
-    x_train, y_train = train_test_split(x, y, random_state=33)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=33)
 
     model = LogisticRegression(C=args.C, max_iter=args.max_iter).fit(x_train, y_train)
 
