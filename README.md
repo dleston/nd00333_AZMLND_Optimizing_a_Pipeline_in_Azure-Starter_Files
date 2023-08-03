@@ -77,7 +77,7 @@ The architecture of both pipelines is quite different. Both models share the sam
 
 ## Future work
 **What are some areas of improvement for future experiments? Why might these improvements help the model?**
-* As the AutoML job correctly identified, the dataset is quite inbalanced. There are 2771 positive samples out of 24712, which is a 11% positivity ratio. A suggested area of improvement would be to downsample the data so that the classes are balanced.
+* As the AutoML job correctly identified, the dataset is quite inbalanced. There are 2771 positive samples out of 24712, which is a 11:100 positivity ratio. A suggested area of improvement would be to downsample the data so that the classes are balanced. We could also check other metrics that take into account the class imbalance, such as Cohen's Kappa, or the Mathews Correlation Coefficient.
 * We could explore a more exhaustive hyperparameter grid search, but I doubt the performance would increase significantly.
 * We could apply some scaling method to the LRC pipeline and check if performance is on par with the best AutoML pipelines.
 * If we were to put one of these models into production, I would definitely not select the VotingEnsemble as my champion model, but the best performing pipeline without ensembling. The marginal improvement over, for example, an XGBoost Classifier, in my opinion, does not justify losing inference speed and model explainability.
