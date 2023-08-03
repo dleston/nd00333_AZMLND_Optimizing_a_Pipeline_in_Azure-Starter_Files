@@ -15,11 +15,11 @@ This model is then compared to an Azure AutoML run.
 ## Summary
 **In 1-2 sentences, explain the problem statement: e.g "This dataset contains data about... we seek to predict..."**
 
-The dataset contains information on direct marketing campaigns of a Portuguese financial institution. We seek to predict whether the client will subscribe a term deposit or not (variable `y`), making this a classification task.
+The dataset contains customer and campaign related information on direct marketing campaigns of a Portuguese financial institution. We seek to predict whether the customer will subscribe a term deposit or not (variable `y`), making this a classification task.
 
 **In 1-2 sentences, explain the solution: e.g. "The best performing model was a ..."**
 
-The best performing model was a VotingEnsemble that resulted from applying an AutoML job, creating a pipeline for preprocessing, training and testing 8 different models which ended up being ensembled by giving each a weight in the final prediction.
+The best performing model was a VotingEnsemble that resulted from applying an AutoML job, creating a pipeline for preprocessing, training and testing 8 different models which ended up being ensembled by giving each a weight in the final predicted class probabilities.
 
 This ensemble is composed of 4 XGBoost Classifiers, 1 LightGBM Classifier, 1 Logistic Regression Classifier, 1 Support Vector Machine with Stochastic Gradient Descent training and 1 Random Forest Classifier.
 
@@ -68,13 +68,16 @@ The only weight that stands out is the one that gives more importance to the Lig
 ## Pipeline comparison
 **Compare the two models and their performance. What are the differences in accuracy? In architecture? If there was a difference, why do you think there was one?**
 
-The AutoML best perfoming model (91.62% Accuracy) achieved a slight improvement with respect to the best hyperparameter tuning configuration (90.76%) of sklearn's Logistic Regression Classifier.
+The AutoML best perfoming model (91.62% Accuracy) achieved a slight improvement with respect to the best hyperparameter tuning configuration (90.76%) of sklearn's Logistic Regression Classifier. The increase was expected as LRC is not tipically among the best ML algorithms when it comes to capturing non-linearities in the data, whereas models such as LightGBM or XGBoost are.
 
-The architecture of both pipelines is quite different though, even if the data cleansing, one-hot encoding and train-test splits is the same. 
+The architecture of both pipelines is quite different. Both models share the same data cleansing, one-hot encoding and train-test split steps, but other than that they follow different processes.
+* The LRC pipeline uses a single ML model and only said model's hyperparameter space is searched. The AutoML pipeline explores combinations of different preprocessing steps, different ML algorithms, and within the same algorithm, multiple hyperparameter configurations.
+* The LRC pipeline does not have a data normalization or standarization step.
+* The AutoML best performing model is an ensemble of weaker learners, a possibility that has not been implemented in the LRC pipeline.
 
 ## Future work
 **What are some areas of improvement for future experiments? Why might these improvements help the model?**
-
-## Proof of cluster clean up
-**If you did not delete your compute cluster in the code, please complete this section. Otherwise, delete this section.**
-**Image of cluster marked for deletion**
+* As the AutoML job correctly identified, the dataset is quite inbalanced. There are 2771 positive samples out of 24712, which is a 11% positivity ratio. A suggested area of improvement would be to downsample the data so that the classes are balanced.
+* We could explore a more exhaustive hyperparameter grid search, but I doubt the performance would increase significantly.
+* We could apply some scaling method to the LRC pipeline and check if performance is on par with the best AutoML pipelines.
+* If we were to put one of these models into production, I would definitely not select the VotingEnsemble as my champion model, but the best performing pipeline without ensembling. The marginal improvement over, for example, an XGBoost Classifier, in my opinion, does not justify losing inference speed and model explainability.
