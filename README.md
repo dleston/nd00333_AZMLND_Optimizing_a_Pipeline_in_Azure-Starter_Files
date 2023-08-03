@@ -20,6 +20,7 @@ The dataset contains information on direct marketing campaigns of a Portuguese f
 **In 1-2 sentences, explain the solution: e.g. "The best performing model was a ..."**
 
 The best performing model was a VotingEnsemble that resulted from applying an AutoML job, creating a pipeline for preprocessing, training and testing 8 different models which ended up being ensembled by giving each a weight in the final prediction.
+
 This ensemble is composed of 4 XGBoost Classifiers, 1 LightGBM Classifier, 1 Logistic Regression Classifier, 1 Support Vector Machine with Stochastic Gradient Descent training and 1 Random Forest Classifier.
 
 ## Scikit-learn Pipeline
@@ -45,6 +46,7 @@ It lets us randomly explore a hyperparameter space, saving a lot of time compare
 
 **What are the benefits of the early stopping policy you chose?**
 We chose a `BanditPolicy`, that defines an early stopping policy based on slack criteria and a frequency and delay interval for evaluation.
+
 We used the `slack_factor` instead of the `slack_amount` parameter. The `slack_factor` is the ratio used to calculate the allowed distance from the best performing run. We chose a value of 10%, so if in each time the policy is evaluated, the metric falls below the slack respect the best performing model, the job is terminated. This allows us to have a hyperdrive job that does not deplete its `max_total_runs` if the model is not improving with each iteration, therefore saving computing time.
 
 ## AutoML
